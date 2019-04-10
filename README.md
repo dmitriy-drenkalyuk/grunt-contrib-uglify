@@ -117,10 +117,10 @@ With this option you can customize root URL that browser will use when looking f
 If the sources are not absolute URLs after prepending of the `sourceMap.root`, the sources are resolved relative to the source map.
 
 #### sourceMap.url
-Type: `String`  
+Type: `String` `Function`  
 Default: `undefined`
 
-Override the calculated value for `sourceMappingURL` in the source map. This is useful if the source map location is not relative to the base path of the minified file, i.e. when using a CDN
+Override the calculated value for `sourceMappingURL` in the source map. This is useful if the source map location is not relative to the base path of the minified file, i.e. when using a CDN. If a function is provided, the destination file name is passed as the argument and the return value will be used as the sourceMappingURL.
 
 #### wrap
 Type: `String`  
