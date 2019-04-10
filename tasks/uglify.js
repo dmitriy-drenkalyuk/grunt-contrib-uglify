@@ -57,7 +57,7 @@ module.exports = function(grunt) {
     });
 
     var footer = normalizeLf(options.footer);
-    var mapNameGenerator, mapInNameGenerator;
+    var mapNameGenerator, mapInNameGenerator, mapUrlGenerator;
     var created = {
       maps: 0,
       files: 0
@@ -72,6 +72,9 @@ module.exports = function(grunt) {
     // function to get the name of the sourceMap
     if (typeof options.sourceMapName === 'function') {
       mapNameGenerator = options.sourceMapName;
+    }
+    if (typeof options.sourceMap.url === 'function') {
+      mapUrlGenerator = options.sourceMap.url;
     }
 
     // Iterate over all src-dest file pairs.
@@ -133,6 +136,15 @@ module.exports = function(grunt) {
           var destToSourceMapPath = relativePath(f.dest, options.generatedSourceMapName);
           var sourceMapBasename = path.basename(options.generatedSourceMapName);
           options.sourceMap.url = uriPath(path.join(destToSourceMapPath, sourceMapBasename));
+        }
+        else if (mapUrlGenerator) {
+          try {
+            options.sourceMap.url = mapUrlGenerator(path.basename(f.dest));
+          } catch (e) {
+            err = new Error('sourceMap.url failed.');
+            err.origError = e;
+            grunt.fail.warn(err);
+          }
         }
       }
 
